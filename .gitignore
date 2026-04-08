@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# Env files
+.env
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# Ollama models (just in case)
+.ollama/

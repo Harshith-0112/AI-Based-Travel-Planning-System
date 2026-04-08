@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//TravelPlannerMCP//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:travel-planner-day-1@local
+DTSTAMP:20260405T130758Z
+DTSTART:20260405T090000
+DTEND:20260405T190000
+SUMMARY:Day 1 - History Focus
+DESCRIPTION:Hotel: Mysore Central Stay\nHotel nightly price: 2500.0\nAttractions: Mysore Museum Spot 4, Mysore Restaurant Spot 3, Mysore Museum Spot 1\nEstimated travel time: 3043.0 minutes\nDaily estimated cost: 1050.0
+END:VEVENT
+BEGIN:VEVENT
+UID:travel-planner-day-2@local
+DTSTAMP:20260405T130758Z
+DTSTART:20260406T090000
+DTEND:20260406T190000
+SUMMARY:Day 2 - Food Focus
+DESCRIPTION:Hotel: Mysore Central Stay\nHotel nightly price: 2500.0\nAttractions: Mysore Restaurant Spot 4, Mysore Museum Spot 2, Mysore Restaurant Spot 1\nEstimated travel time: 3036.7 minutes\nDaily estimated cost: 1050.0
+END:VEVENT
+BEGIN:VEVENT
+UID:travel-planner-day-3@local
+DTSTAMP:20260405T130758Z
+DTSTART:20260407T090000
+DTEND:20260407T190000
+SUMMARY:Day 3 - History Focus
+DESCRIPTION:Hotel: Mysore Central Stay\nHotel nightly price: 2500.0\nAttractions: Mysore Museum Spot 3, Mysore Restaurant Spot 2, Free exploration\nEstimated travel time: 2026.5 minutes\nDaily estimated cost: 950.0
+END:VEVENT
+END:VCALENDAR
