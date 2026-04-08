@@ -1,5 +1,10 @@
 # AI-Based Travel Planning System Using Multi-Agent Architecture and MCP Integration
 
+## 👨‍💻 Author
+- **Thota Harshith**
+- 📧 Email: harshiththota2004@gmail.com
+
+
 ## 1. Project Overview
 This mini-project is a local-first AI travel planner that builds a day-by-day itinerary from destination, budget, trip duration, and user preferences. It combines a FastAPI backend, Streamlit frontend, Ollama-powered local LLM support, MCP-style tool wrappers, and provider abstractions for hotels and maps.
 
