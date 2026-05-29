@@ -20,6 +20,8 @@ class ItineraryAgent:
             f"Destination: {request.destination}\n"
             f"Days: {request.days}\n"
             f"Preferences: {', '.join(request.preferences)}\n"
+            f"Hotel preference: {request.hotel_preference}\n"
+            f"Transport mode: {request.transport_mode}\n"
             f"Hotel: {hotel_name}\n"
             f"Budget status: {'within budget' if budget.within_budget else 'over budget'}\n"
             "Write a concise academic-demo-friendly itinerary summary in 5-6 lines."
@@ -33,7 +35,7 @@ class ItineraryAgent:
 
         hotel_prompt = (
             f"Hotel: {hotel_name}\n"
-            f"Hotel score info: {hotel.ranking_reason if hotel else 'No hotel available'}\n"
+            f"Hotel preference: {request.hotel_preference}\n"
             "Explain in 3 lines why this hotel is a sensible recommendation for the trip."
         )
         hotel_reason = await self.ollama_client.generate_text(hotel_prompt)

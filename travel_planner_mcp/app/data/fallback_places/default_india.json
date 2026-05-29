@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Taj Mahal",
+    "category": "history",
+    "description": "UNESCO World Heritage monument in Agra and one of India's most recognized landmarks.",
+    "estimated_duration_hours": 2.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Qutub Minar",
+    "category": "history",
+    "description": "Historic minaret and archaeological complex in Delhi.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Mysore Palace",
+    "category": "history",
+    "description": "Grand royal palace known for Indo-Saracenic architecture and illuminated evenings.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Hawa Mahal",
+    "category": "history",
+    "description": "Jaipur's famous palace facade with distinctive honeycomb windows.",
+    "estimated_duration_hours": 1.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Meenakshi Amman Temple",
+    "category": "temples",
+    "description": "Major Madurai temple complex known for colorful gopurams and active worship.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Marine Drive",
+    "category": "relaxation",
+    "description": "Mumbai's sea-facing promenade for evening walks and skyline views.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Gateway of India",
+    "category": "history",
+    "description": "Mumbai waterfront monument close to ferry points and heritage hotels.",
+    "estimated_duration_hours": 1.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Chandni Chowk",
+    "category": "food",
+    "description": "Old Delhi market area known for street food, sweets, and historic lanes.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  }
+]

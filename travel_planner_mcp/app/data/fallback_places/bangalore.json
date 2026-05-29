@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Bangalore Palace",
+    "category": "history",
+    "description": "Historic palace with grand rooms, gardens, and a strong city heritage feel.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Tipu Sultan's Summer Palace",
+    "category": "history",
+    "description": "Compact wooden palace connected to Bengaluru's older history.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Lalbagh Botanical Garden",
+    "category": "nature",
+    "description": "Large botanical garden with glasshouse, walking paths, and calm green space.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Cubbon Park",
+    "category": "relaxation",
+    "description": "Central green space suited for slow walks and a relaxed break from traffic.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "ISKCON Temple Bangalore",
+    "category": "temples",
+    "description": "Major temple complex with peaceful spaces, architecture, and vegetarian food options.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Visvesvaraya Industrial and Technological Museum",
+    "category": "family",
+    "description": "Interactive science and technology museum that works well for families and students.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Government Museum Bengaluru",
+    "category": "history",
+    "description": "One of India's older museums, with archaeology, art, and regional history exhibits.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Commercial Street",
+    "category": "shopping",
+    "description": "Busy shopping area for clothes, accessories, footwear, and quick bites.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "UB City",
+    "category": "shopping",
+    "description": "Upscale shopping and dining complex in central Bengaluru.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "VV Puram Food Street",
+    "category": "food",
+    "description": "Popular vegetarian food street with dosas, sweets, chaats, and local snacks.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  }
+]

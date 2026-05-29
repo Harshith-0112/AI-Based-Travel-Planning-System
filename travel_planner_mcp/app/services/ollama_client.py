@@ -22,18 +22,21 @@ class OllamaClient:
         except httpx.HTTPError:
             return False
 
-    async def generate_text(self, prompt: str, system_prompt: str = "You are a helpful travel planning assistant.") -> str:
+    async def generate_text(self, prompt: str, timeout: int = 20) -> str:
         payload = {
             "model": self.model,
-            "stream": False,
-            "system": system_prompt,
             "prompt": prompt,
+            "stream": False,
         }
         try:
-            async with httpx.AsyncClient(timeout=45.0) as client:
-                response = await client.post(f"{self.base_url}/api/generate", json=payload)
+            async with httpx.AsyncClient(timeout=timeout) as client:
+                response = await client.post(
+                    f"{self.base_url}/api/generate",
+                    json=payload,
+                )
                 response.raise_for_status()
                 data = response.json()
                 return data.get("response", "").strip()
+
         except (httpx.HTTPError, json.JSONDecodeError):
             return ""

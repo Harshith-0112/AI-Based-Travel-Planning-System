@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Baga Beach",
+    "category": "beaches",
+    "description": "Lively beach area with water sports, cafes, and evening energy.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Calangute Beach",
+    "category": "beaches",
+    "description": "Wide popular beach suited for relaxed walks and classic Goa views.",
+    "estimated_duration_hours": 2.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Fort Aguada",
+    "category": "history",
+    "description": "Portuguese-era fort with sea views and easy sightseeing access.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Basilica of Bom Jesus",
+    "category": "history",
+    "description": "UNESCO-listed church and one of Old Goa's most important landmarks.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Fontainhas",
+    "category": "history",
+    "description": "Colorful Latin Quarter with heritage lanes, cafes, and galleries.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Dudhsagar Falls",
+    "category": "nature",
+    "description": "Scenic waterfall day trip for nature and photography lovers.",
+    "estimated_duration_hours": 5.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Mapusa Market",
+    "category": "shopping",
+    "description": "Busy local market for spices, snacks, produce, and Goan goods.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Martin's Corner",
+    "category": "food",
+    "description": "Well-known Goan restaurant for seafood and regional dishes.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Gunpowder Goa",
+    "category": "food",
+    "description": "Popular restaurant known for coastal and regional Indian food.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  }
+]

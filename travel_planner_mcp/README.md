@@ -1,195 +1,322 @@
-# AI-Based Travel Planning System Using Multi-Agent Architecture and MCP Integration
+# AI Travel Planner
 
-## 👨‍💻 Author
-- **Thota Harshith**
-- 📧 Email: harshiththota2004@gmail.com
+AI Travel Planner is a full-stack trip planning application built with FastAPI, React, SQLite, SQLModel, Ollama, and MCP-style provider wrappers. It generates budget-aware travel plans with hotels, transport estimates, day-wise itineraries, verified places, recent trips, and favourites.
 
+The project is designed for local-first demos: Google Maps and SerpAPI can improve live data quality, but the app still produces realistic itineraries through OpenStreetMap, verified cache, Ollama-assisted candidate generation, and curated fallback tourist datasets.
 
-## 1. Project Overview
-This mini-project is a local-first AI travel planner that builds a day-by-day itinerary from destination, budget, trip duration, and user preferences. It combines a FastAPI backend, Streamlit frontend, Ollama-powered local LLM support, MCP-style tool wrappers, and provider abstractions for hotels and maps.
+## Author
 
-## 2. Problem Statement
-Students and travelers often need a simple planning assistant that can combine itinerary generation, hotel selection, route estimation, and budget reasoning in one workflow. Many solutions depend fully on cloud APIs and break during demos. This project is designed to remain usable even when APIs are unavailable.
+- Thota Harshith
+- Email: harshiththota2004@gmail.com
 
-## 3. Why MCP Is Used
-MCP-style wrappers make external tools easy to explain and reuse. Instead of allowing the LLM to directly invent data, the application calls explicit tools for hotel search and maps operations. This keeps the architecture modular, testable, and viva-friendly.
+## Current Status
 
-## 4. Why Ollama Is Used Instead of OpenAI
-Ollama runs fully on the local machine, avoids cloud dependency, and supports free local inference with configurable open models like `qwen2.5:7b-instruct`, `llama3.1:8b`, and `mistral:7b`. This satisfies the academic requirement of a local-first demo without using the OpenAI API.
+- React + Vite + Tailwind frontend
+- FastAPI backend with protected auth routes
+- SQLite database using SQLModel
+- JWT-based login and registration
+- Database-backed Recent Trips and Favourites
+- Selectable hotels with budget recalculation
+- Budget-aware hotel ranking and rebalance warnings
+- Transport mode support
+- Verified place fallback pipeline
+- Curated India and international tourist place datasets
+- Ollama integration for local LLM summaries and safe enrichment
+- Streamlit app preserved as a legacy interface
 
-## 5. Architecture Explanation
-- `InputAgent` normalizes and validates the trip request.
-- `HotelAgent` queries the hotel MCP wrapper and ranks hotels using a transparent weighted score.
-- `PlacesAgent` gets attractions from maps tools and uses Ollama only for light ranking/description support.
-- `RouteAgent` builds day-wise plans and computes commute information.
-- `BudgetAgent` estimates lodging, transport, food, and miscellaneous costs.
-- `ItineraryAgent` creates the final human-readable summary and hotel reasoning.
-- `ExportAgent` exports the final itinerary into JSON and ICS formats.
+## Architecture
 
-The project follows a tools-first, LLM-second strategy:
-- tools provide prices, locations, routes, and structured data
-- Ollama provides natural-language interpretation and summaries
+The backend uses a modular multi-agent flow:
 
-## 6. Folder Structure
+- `InputAgent` validates and normalizes user trip requests.
+- `HotelAgent` fetches hotel options and ranks them by budget fit, quality, and preference.
+- `TransportAgent` estimates practical transport options based on distance and mode.
+- `PlacesAgent` retrieves and verifies attractions through maps, cache, OSM, Ollama candidates, and curated fallback data.
+- `RouteAgent` builds day-wise itinerary activities from verified or curated attractions.
+- `BudgetAgent` estimates lodging, transport, food, misc cost, and rebalances when possible.
+- `ItineraryAgent` assembles the final trip response.
+- `ExportAgent` supports itinerary export formats.
+
+The core principle is tools first, LLM second. The LLM is not trusted as the source of truth for place existence, prices, coordinates, or ownership of user data.
+
+## Verified Place Pipeline
+
+When attractions are needed, the app follows this order:
+
+1. Google Maps Places search
+2. Verified places cache from SQLite
+3. Destination-specific static fallback JSON in `app/data/fallback_places/`
+4. OpenStreetMap discovery through Overpass
+5. Ollama candidate generation plus Google Maps or OpenStreetMap verification
+6. Curated tourist place datasets:
+   - `app/data/india_places.json`
+   - `app/data/international_places.json`
+7. User-facing warning if no reliable places are available
+
+Unverified Ollama places are never shown as normal itinerary items. Wrong-city landmarks and generic placeholder names are rejected before display.
+
+## Curated Fallback Dataset
+
+The curated fallback system provides realistic places when live APIs fail. It supports India and international destinations, destination aliases, user preference matching, budget-aware ordering, duplicate prevention, and deterministic descriptions.
+
+Example dataset shape:
+
+```json
+{
+  "varanasi": {
+    "temples": [
+      {
+        "name": "Kashi Vishwanath Temple",
+        "description": "One of the most sacred Hindu temples dedicated to Lord Shiva.",
+        "tags": ["temple", "spiritual", "old city"],
+        "estimated_cost": 300,
+        "best_time": "Morning"
+      }
+    ]
+  }
+}
+```
+
+Supported curated India examples include Delhi, Mumbai, Hyderabad, Bangalore, Chennai, Kolkata, Jaipur, Udaipur, Mysore, Kochi, Goa, Varanasi, Amritsar, Agra, Visakhapatnam, Ooty, Manali, Shimla, Darjeeling, Srinagar, Pondicherry, Rishikesh, Hampi, Mahabalipuram, Tirupati, Madurai, Andaman, and Leh-Ladakh.
+
+Supported international examples include Paris, London, Rome, Dubai, Singapore, Tokyo, Bangkok, Bali, New York, Los Angeles, Istanbul, Sydney, Zurich, Barcelona, Amsterdam, Seoul, Hong Kong, and Maldives.
+
+## Frontend
+
+The main frontend is in `frontend/` and uses:
+
+- React
+- Vite
+- Tailwind CSS
+- React Router
+- Axios
+- React Hot Toast
+
+Main pages:
+
+- `Login`
+- `Register`
+- `Dashboard`
+- `Create Trip`
+- `Trip Result`
+- `Trips` with Recent and Favourites tabs
+
+Frontend features:
+
+- Dark glassmorphism UI
+- Multi-step trip creation form
+- Protected routes
+- JWT token storage
+- Current trip recovery through localStorage
+- Database-backed recent and favourite trips
+- Selectable hotel cards without reordering
+- Budget cards and progress bars
+- Itinerary descriptions, tags, best-time badges, and source badges
+
+## Backend API Routes
+
+Common routes include:
+
+- `POST /auth/register`
+- `POST /auth/login`
+- `GET /auth/me`
+- `POST /plan-trip`
+- `POST /trips`
+- `GET /trips/recent`
+- `GET /trips/favourites`
+- `GET /trips/{trip_id}`
+- `POST /trips/{trip_id}/favorite`
+- `POST /trips/{trip_id}/unfavorite`
+- `DELETE /trips/{trip_id}`
+- Legacy itinerary routes under `/itineraries`
+
+All trip persistence endpoints are protected and filter by `current_user.id`.
+
+## Project Structure
+
 ```text
 travel_planner_mcp/
   app/
-    agents/
-    api/
-    mcp_servers/
-    models/
-    providers/
-    services/
-    utils/
+    agents/                 # Trip planning agents
+    api/                    # FastAPI app and route modules
+    data/
+      fallback_places/      # Destination-specific offline fallback JSON
+      india_places.json     # Curated India tourist places
+      international_places.json
+    db/                     # SQLModel models and database setup
+    mcp_servers/            # MCP-style maps and hotel wrappers
+    models/                 # Pydantic/SQLModel schemas
+    providers/              # Hotel, OSM, verifier, fallback providers
+    services/               # Ollama and scoring services
+    utils/                  # Normalization and helpers
   frontend/
-    streamlit_app.py
+    src/
+      api/
+      components/
+      context/
+      pages/
+      utils/
   tests/
-  .env.example
+  frontend/streamlit_app.py # Legacy Streamlit UI, kept for compatibility
   requirements.txt
   README.md
 ```
 
-## 7. Setup Instructions
+## Setup
+
+Create a virtual environment and install backend dependencies:
+
 ```bash
 cd travel_planner_mcp
-python3.11 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 ```
 
-## 8. How to Install and Run Ollama
-1. Install Ollama from [https://ollama.com/download](https://ollama.com/download)
-2. Start Ollama:
+Start the backend:
+
+```bash
+./.venv/bin/uvicorn app.api.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Install and run the React frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev -- --host 127.0.0.1
+```
+
+Open:
+
+```text
+http://127.0.0.1:5173
+```
+
+The FastAPI backend runs at:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Ollama Setup
+
+Install Ollama from:
+
+```text
+https://ollama.com/download
+```
+
+Start Ollama:
+
 ```bash
 ollama serve
 ```
 
-## 9. How to Pull the Default Model
+Pull a local model:
+
 ```bash
 ollama pull qwen2.5:7b-instruct
 ```
+
 Optional models:
+
 ```bash
 ollama pull llama3.1:8b
 ollama pull mistral:7b
 ```
 
-## 10. How to Enable Google Maps APIs
-1. Create a Google Cloud project.
-2. Enable:
-   - Geocoding API
-   - Places API
-   - Routes API
-3. Create an API key.
-4. Put the key in `.env` as `GOOGLE_MAPS_API_KEY=...`
+Ollama is used for destination summaries, safe description enrichment for already verified places, and candidate generation only when stronger place sources fail.
 
-## 11. How to Get a SerpAPI Key
-1. Create an account at [https://serpapi.com](https://serpapi.com)
-2. Copy the API key from the dashboard.
-3. Add it to `.env` as `SERPAPI_API_KEY=...`
+## Optional API Keys
 
-## 12. How Fallback Mode Works
-- If `SERPAPI_API_KEY` is missing, the app uses `MockHotelProvider`
-- If `GOOGLE_MAPS_API_KEY` is missing, the app uses `MockMapsProvider`
-- If Ollama is not reachable, the app uses deterministic summary text
+Google Maps:
 
-This means the project still works offline for demos and viva.
+```env
+GOOGLE_MAPS_API_KEY=your_key_here
+```
 
-## 13. Run Instructions
-Start the backend:
+Enable Geocoding API, Places API, and Routes API in Google Cloud.
+
+SerpAPI:
+
+```env
+SERPAPI_API_KEY=your_key_here
+```
+
+Without these keys, the app falls back to mock hotels, OpenStreetMap, verified cache, Ollama candidates with verification, and curated fallback datasets.
+
+## Database
+
+The app uses SQLite through SQLModel. The database stores:
+
+- Users
+- Saved/generated trips
+- Recent trips
+- Favourite trips
+- Selected hotels
+- Budget breakdown JSON
+- Verified places cache
+
+Trip records are always scoped by `user_id`, so User A cannot read, favourite, delete, or list User B's trips.
+
+## Testing
+
+Run backend tests:
+
 ```bash
-uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
+./.venv/bin/pytest -q
 ```
 
-Start the frontend in a second terminal:
+Validate the React build:
+
 ```bash
-streamlit run frontend/streamlit_app.py
+cd frontend
+npm install
+npm run build
 ```
 
-Run tests:
-```bash
-pytest
-```
+Useful manual checks:
 
-## 14. Sample API Requests
-### `POST /plan-trip`
-```json
-{
-  "destination": "Mysore",
-  "budget": 15000,
-  "days": 3,
-  "preferences": ["history", "food"],
-  "start_date": "2026-04-10",
-  "travelers": 2,
-  "starting_location": "Bengaluru"
-}
-```
+- Register two users and confirm trips do not leak across accounts.
+- Generate a trip with Google Maps disabled and verify fallback places still appear.
+- Try aliases such as `vizag`, `benaras`, `bombay`, and `banglore`.
+- Select alternative hotels and confirm the hotel card order stays stable.
+- Mark a trip as favourite, refresh, and confirm it persists.
 
-### Example Response Shape
-```json
-{
-  "trip_request": {
-    "destination": "Mysore",
-    "budget": 15000,
-    "days": 3,
-    "preferences": ["history", "food"],
-    "start_date": "2026-04-10",
-    "travelers": 2,
-    "starting_location": "Bengaluru"
-  },
-  "hotel": {
-    "name": "Mysore Central Stay",
-    "nightly_price": 2500.0,
-    "source": "mock"
-  },
-  "daily_plans": [
-    {
-      "day_number": 1,
-      "theme": "History Focus"
-    }
-  ]
-}
-```
+## UI Screenshots
 
-## 15. Sample UI Screenshot Placeholders
-- `docs/screenshots/home.png`
-- `docs/screenshots/generated-plan.png`
+Add screenshots here when preparing a report or portfolio:
 
-## 16. Sample Itinerary Output
-Day 1 may include Mysore Palace in the morning, a heritage museum in the afternoon, and a local food street in the evening, with travel time and cost estimates shown for each step.
+- `docs/screenshots/dashboard.png`
+- `docs/screenshots/create-trip.png`
+- `docs/screenshots/trip-result.png`
+- `docs/screenshots/trips-library.png`
 
-## 17. Sample ICS Output
-```ics
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//TravelPlannerMCP//EN
-BEGIN:VEVENT
-SUMMARY:Day 1 - History Focus
-DESCRIPTION:Hotel: Mysore Central Stay\nHotel nightly price: 2500.0\nAttractions: Mysore Palace, Museum Visit\nEstimated travel time: 45.0 minutes\nDaily estimated cost: 1350.0
-END:VEVENT
-END:VCALENDAR
-```
+## Limitations
 
-## 18. Limitations
-- Live hotel pricing depends on SerpAPI quota and availability.
-- Live routes and places depend on Google Maps APIs being enabled.
-- Ollama model quality depends on local machine resources.
-- Budgeting uses reasonable heuristics for food and transport, not real receipts.
+- Live prices depend on external provider availability and quotas.
+- OpenStreetMap coverage varies by destination and tag quality.
+- Curated fallback data covers popular destinations, not every town.
+- Ollama output quality depends on the local model and machine resources.
+- Budget estimates are planning estimates, not guaranteed real-world costs.
+- International curated costs are approximate and normalized for itinerary comparison.
 
-## 19. Future Scope
-- Add more travel modes like walking and transit optimization
-- Add restaurant recommendation scoring
-- Add PDF export
-- Add user login and trip history
-- Add weather and seasonal recommendations
+## Future Scope
 
-## 20. Viva / Demo Talking Points
-- Explain the tools-first principle and why the LLM is not trusted for prices and distances.
-- Show the provider abstraction and how fallback mode prevents demo failure.
-- Explain the MCP-style tool layer as a reusable interface for maps and hotel search.
-- Show how multi-agent separation improves clarity and modularity.
-- Explain why Ollama was chosen for local inference and academic reproducibility.
+- Add weather-aware planning.
+- Add live restaurant discovery and booking links.
+- Add PDF export.
+- Add route map visualization in React.
+- Expand curated datasets by country and season.
+- Add admin tools for managing fallback tourist data.
+- Add background refresh jobs for verified place cache.
 
-## 21. Academic Notes
-This project is intentionally designed as a clear MVP. The code favors modularity, type hints, transparent scoring, and graceful degradation so it is easy to defend in a viva and easy to extend in future.
+## Demo Talking Points
+
+- The app preserves user trust by verifying places before display.
+- Curated fallback data prevents API failures from breaking demos.
+- Database-backed Recent and Favourites prove authenticated persistence.
+- MCP-style wrappers keep external services isolated from agent logic.
+- Ollama is used as a local assistant, not as an unchecked source of truth.

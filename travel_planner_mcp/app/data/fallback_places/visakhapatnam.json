@@ -1,0 +1,86 @@
+[
+  {
+    "name": "RK Beach",
+    "category": "beaches",
+    "description": "Popular city beach and promenade along the Bay of Bengal, good for a relaxed morning or evening visit.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Kailasagiri",
+    "category": "nature",
+    "description": "Hilltop park with sea views, gardens, viewpoints, and a ropeway experience.",
+    "estimated_duration_hours": 2.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "INS Kurusura Submarine Museum",
+    "category": "history",
+    "description": "Museum inside a decommissioned submarine near RK Beach, showcasing naval life and equipment.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Yarada Beach",
+    "category": "beaches",
+    "description": "Scenic beach near green hills, suited for a quieter coastal outing.",
+    "estimated_duration_hours": 2.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Rushikonda Beach",
+    "category": "beaches",
+    "description": "Well-known beach for sea views, water activities, and a breezy coastal stop.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Dolphin's Nose",
+    "category": "nature",
+    "description": "Distinctive rocky viewpoint and lighthouse area overlooking the coastline.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Simhachalam Temple",
+    "category": "temples",
+    "description": "Historic hill temple dedicated to Lord Narasimha, known for architecture and pilgrimage significance.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "VUDA Park",
+    "category": "family",
+    "description": "Family-friendly urban park near the beach with lawns, paths, and leisure spaces.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "TU 142 Aircraft Museum",
+    "category": "history",
+    "description": "Museum built around a retired naval aircraft, located close to the beach museum circuit.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Thotlakonda Buddhist Complex",
+    "category": "history",
+    "description": "Ancient Buddhist monastery ruins on a hill with coastal views and archaeological interest.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Visakha Museum",
+    "category": "history",
+    "description": "Local museum with exhibits about Visakhapatnam's maritime, colonial, and regional history.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Borra Caves",
+    "category": "day_trip",
+    "description": "Limestone cave system in the Araku Valley region, often visited as a day trip from Visakhapatnam.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  }
+]

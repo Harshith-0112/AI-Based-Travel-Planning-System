@@ -26,11 +26,14 @@ class HotelAgent:
             warnings.append("No hotel results were found. Planning will continue without a selected hotel.")
             return None, [], warnings
 
-        budget_per_night = request.budget / max(request.days, 1)
-        preference_bonus = 0.8 if "family" in request.preferences and any("family" in a.lower() for a in hotels[0].amenities) else 0.5
         scored: list[HotelOption] = []
         for hotel in hotels:
-            score, reason = score_hotel(hotel, budget_per_night, preference_bonus)
+            preference_bonus = (
+                0.8
+                if "family" in request.preferences and any("family" in amenity.lower() for amenity in hotel.amenities)
+                else 0.5
+            )
+            score, reason = score_hotel(hotel, request, preference_bonus)
             hotel.ranking_score = score
             hotel.ranking_reason = reason
             scored.append(hotel)

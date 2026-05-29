@@ -19,7 +19,8 @@ def plan_to_ics(plan: TripPlanResponse) -> str:
     ]
     now_stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     hotel_name = plan.hotel.name if plan.hotel else "No hotel selected"
-    hotel_price = plan.hotel.nightly_price if plan.hotel else 0.0
+    hotel_price = plan.hotel.nightly_price if plan.hotel and plan.hotel.nightly_price is not None else "Not available"
+    transport = plan.transport.mode if plan.transport else "Not estimated"
 
     for daily_plan in plan.daily_plans:
         if daily_plan.date:
@@ -38,6 +39,7 @@ def plan_to_ics(plan: TripPlanResponse) -> str:
         description = (
             f"Hotel: {hotel_name}\\n"
             f"Hotel nightly price: {hotel_price}\\n"
+            f"Transport mode: {transport}\\n"
             f"Attractions: {attraction_names}\\n"
             f"Estimated travel time: {total_travel} minutes\\n"
             f"Daily estimated cost: {daily_plan.estimated_cost}"

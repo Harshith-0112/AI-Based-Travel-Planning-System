@@ -2,13 +2,14 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from app.agents.budget_agent import BudgetAgent
+from app.agents.budget_agent import BudgetAgent, rebalance_budget_to_fit
 from app.agents.export_agent import ExportAgent
 from app.agents.hotel_agent import HotelAgent
 from app.agents.input_agent import InputAgent
 from app.agents.itinerary_agent import ItineraryAgent
 from app.agents.places_agent import PlacesAgent
 from app.agents.route_agent import RouteAgent
+from app.agents.transport_agent import TransportAgent
 from app.mcp_servers.google_maps_mcp import GoogleMapsMCPServer
 from app.mcp_servers.hotel_mcp import HotelSearchMCPServer
 from app.models.schemas import ProviderStatus, TripPlanResponse, TripRequest
@@ -17,6 +18,7 @@ from app.providers.mock_hotel_provider import MockHotelProvider
 from app.providers.mock_maps_provider import MockMapsProvider
 from app.providers.serpapi_hotel_provider import SerpApiHotelProvider
 from app.services.ollama_client import OllamaClient
+from app.services.scoring_service import build_user_facing_hotel_reason
 from app.utils.config import Settings
 
 
@@ -32,7 +34,8 @@ class PlanningService:
         self.input_agent = InputAgent()
         self.hotel_agent = HotelAgent(self.hotel_mcp)
         self.places_agent = PlacesAgent(self.maps_mcp, self.ollama_client)
-        self.route_agent = RouteAgent(self.maps_mcp)
+        self.route_agent = RouteAgent(self.maps_mcp, self.ollama_client)
+        self.transport_agent = TransportAgent(self.maps_mcp)
         self.budget_agent = BudgetAgent()
         self.itinerary_agent = ItineraryAgent(self.ollama_client)
         self.export_agent = ExportAgent()
@@ -73,11 +76,38 @@ class PlanningService:
         hotel, alternative_hotels, hotel_notes = await self.hotel_agent.select_hotels(normalized_request)
         notes.extend(hotel_notes)
 
+        transport = await self.transport_agent.estimate_transport(
+            starting_location=normalized_request.starting_location,
+            destination=normalized_request.destination,
+            travelers=normalized_request.travelers,
+            transport_mode=normalized_request.transport_mode,
+            budget=normalized_request.budget,
+        )
+
         attractions, attraction_notes = await self.places_agent.get_ranked_attractions(normalized_request, hotel)
         notes.extend(attraction_notes)
 
         daily_plans = await self.route_agent.build_daily_skeleton(normalized_request, hotel, attractions)
-        budget_breakdown = self.budget_agent.estimate(normalized_request, hotel, daily_plans)
+        budget_breakdown = self.budget_agent.estimate(normalized_request, hotel, daily_plans, transport)
+        hotel_options = [item for item in [hotel, *alternative_hotels] if item is not None]
+        cheaper_transport_options = await self.transport_agent.cheaper_practical_options(
+            starting_location=normalized_request.starting_location,
+            destination=normalized_request.destination,
+            travelers=normalized_request.travelers,
+            current_mode=transport.mode,
+        )
+        hotel, transport, budget_breakdown, hotel_options = rebalance_budget_to_fit(
+            normalized_request,
+            budget_breakdown,
+            hotel,
+            hotel_options,
+            transport,
+            cheaper_transport_options,
+        )
+        alternative_hotels = [
+            item for item in hotel_options
+            if hotel is None or item.name != hotel.name or item.address != hotel.address
+        ][:3]
         if not budget_breakdown.within_budget:
             notes.append(
                 f"Estimated cost exceeds budget by {budget_breakdown.over_budget_amount:.2f}. "
@@ -92,11 +122,13 @@ class PlanningService:
             daily_plans,
             budget_breakdown,
         )
+        hotel_reason = build_user_facing_hotel_reason(hotel, normalized_request)
         return TripPlanResponse(
             trip_request=normalized_request,
             provider_status=provider_status,
             hotel=hotel,
             alternative_hotels=alternative_hotels,
+            transport=transport,
             attractions=attractions,
             daily_plans=daily_plans,
             budget_breakdown=budget_breakdown,

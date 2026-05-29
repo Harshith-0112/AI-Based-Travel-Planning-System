@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Charminar",
+    "category": "history",
+    "description": "Iconic old city monument with markets and classic Hyderabad street life nearby.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Golconda Fort",
+    "category": "history",
+    "description": "Large fort complex with views, stories of the Qutb Shahi rulers, and evening light shows.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Salar Jung Museum",
+    "category": "history",
+    "description": "Major museum with art, clocks, manuscripts, and collections from across the world.",
+    "estimated_duration_hours": 2.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Chowmahalla Palace",
+    "category": "history",
+    "description": "Restored palace complex that shows the royal side of Hyderabad's Nizam era.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Paradise Biryani",
+    "category": "food",
+    "description": "Popular stop for Hyderabadi biryani and quick local meals.",
+    "estimated_duration_hours": 1.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Cafe Niloufer",
+    "category": "food",
+    "description": "Known for Irani chai, Osmania biscuits, and casual snacks.",
+    "estimated_duration_hours": 1.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Laad Bazaar",
+    "category": "shopping",
+    "description": "Old city bazaar for bangles, pearls, textiles, and souvenirs.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Hussain Sagar Lake",
+    "category": "relaxation",
+    "description": "Lakeside promenade for an easy evening walk and city views.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  }
+]

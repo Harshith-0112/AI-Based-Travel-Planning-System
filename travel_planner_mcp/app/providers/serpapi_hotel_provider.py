@@ -13,15 +13,17 @@ from app.utils.logger import get_logger
 logger = get_logger(__name__)
 
 
-def _to_float(value) -> float:
+def _to_float(value) -> float | None:
     if value is None:
-        return 0.0
+        return None
     if isinstance(value, (int, float)):
-        return float(value)
+        number = float(value)
+        return number if number > 0 else None
     if isinstance(value, str):
         cleaned = re.sub(r"[^\d.]", "", value)
-        return float(cleaned) if cleaned else 0.0
-    return 0.0
+        number = float(cleaned) if cleaned else None
+        return number if number and number > 0 else None
+    return None
 
 
 class SerpApiHotelProvider(BaseHotelProvider):
@@ -45,6 +47,7 @@ class SerpApiHotelProvider(BaseHotelProvider):
             check_in = date.today().isoformat()
         if not check_out:
             check_out = (date.fromisoformat(check_in) + timedelta(days=2)).isoformat()
+        nights = max((date.fromisoformat(check_out) - date.fromisoformat(check_in)).days, 1)
 
         params = {
             "engine": "google_hotels",
@@ -70,17 +73,21 @@ class SerpApiHotelProvider(BaseHotelProvider):
             nightly = (
                 item.get("rate_per_night", {}).get("lowest")
                 or item.get("total_rate", {}).get("lowest")
-                or 0
+                
             )
-            total = item.get("total_rate", {}).get("lowest") or nightly
+            total = item.get("total_rate", {}).get("lowest")
             gps = item.get("gps_coordinates", {}) or {}
+            nightly_price = _to_float(nightly)
+            total_price = _to_float(total)
+            if total_price is None and nightly_price is not None:
+                total_price = nightly_price * nights
 
             normalized.append(
                 HotelOption(
                     name=item.get("name", "Unknown Hotel"),
                     address=item.get("address", destination),
-                    nightly_price=_to_float(nightly),
-                    total_price=_to_float(total),
+                    nightly_price=nightly_price,
+                    total_price=total_price,
                     rating=item.get("overall_rating"),
                     review_count=item.get("reviews"),
                     latitude=gps.get("latitude"),

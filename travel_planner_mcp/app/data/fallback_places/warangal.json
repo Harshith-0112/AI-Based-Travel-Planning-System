@@ -1,0 +1,51 @@
+[
+  {
+    "name": "Warangal Fort",
+    "category": "history",
+    "description": "Historic Kakatiya fort ruins with stone gateways and open-air monuments.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Thousand Pillar Temple",
+    "category": "temples",
+    "description": "Important Kakatiya-era temple known for carved pillars and architecture.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Bhadrakali Temple",
+    "category": "temples",
+    "description": "Lakeside temple with a peaceful setting and strong local significance.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Ramappa Temple",
+    "category": "history",
+    "description": "UNESCO-listed temple near Warangal with detailed Kakatiya stone work.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Laknavaram Lake",
+    "category": "nature",
+    "description": "Lake destination with greenery, a suspension bridge, and boating options.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Pakhal Lake",
+    "category": "nature",
+    "description": "Scenic lake near Warangal for a quieter nature-focused outing.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Kakatiya Musical Garden",
+    "category": "family",
+    "description": "Family-friendly garden close to Bhadrakali Lake for an evening stop.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  }
+]

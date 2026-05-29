@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Mysore Palace",
+    "category": "history",
+    "description": "Grand royal palace known for Indo-Saracenic architecture and illuminated evenings.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Chamundi Hill",
+    "category": "nature",
+    "description": "Scenic hill viewpoint above Mysore with temple access and city views.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Sri Chamundeshwari Temple",
+    "category": "temples",
+    "description": "Important temple on Chamundi Hill dedicated to Goddess Chamundeshwari.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Brindavan Gardens",
+    "category": "nature",
+    "description": "Terraced garden near KRS Dam known for fountains and evening lighting.",
+    "estimated_duration_hours": 2.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "St. Philomena's Cathedral",
+    "category": "history",
+    "description": "Gothic-style cathedral and one of Mysore's most recognizable landmarks.",
+    "estimated_duration_hours": 1.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Jaganmohan Palace",
+    "category": "history",
+    "description": "Former royal palace that houses an art gallery and cultural exhibits.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Karanji Lake",
+    "category": "nature",
+    "description": "Quiet lake and nature park with a walk-through aviary and boating options.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Mysore Zoo",
+    "category": "family",
+    "description": "Well-known zoological garden suitable for families and slower sightseeing.",
+    "estimated_duration_hours": 3.0,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Devaraja Market",
+    "category": "shopping",
+    "description": "Traditional market for flowers, spices, produce, and local shopping.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  },
+  {
+    "name": "Rail Museum Mysore",
+    "category": "family",
+    "description": "Rail heritage museum with vintage locomotives and family-friendly exhibits.",
+    "estimated_duration_hours": 1.5,
+    "source": "fallback_cache"
+  }
+]
