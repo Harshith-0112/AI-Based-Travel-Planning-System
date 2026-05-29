@@ -4,10 +4,7 @@ AI Travel Planner is a full-stack trip planning application built with FastAPI, 
 
 The project is designed for local-first demos: Google Maps and SerpAPI can improve live data quality, but the app still produces realistic itineraries through OpenStreetMap, verified cache, Ollama-assisted candidate generation, and curated fallback tourist datasets.
 
-## Author
 
-- Thota Harshith
-- Email: harshiththota2004@gmail.com
 
 ## Current Status
 
