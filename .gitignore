@@ -1,17 +1,25 @@
 # Python
+.venv/
 __pycache__/
 *.pyc
-.venv/
-env/
 
-# Env files
+# Env
 .env
 
-# Mac
+# Database
+*.db
+*.sqlite3
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Build
+dist/
+build/
+
+# OS
 .DS_Store
 
 # Logs
 *.log
-
-# Ollama models (just in case)
-.ollama/
