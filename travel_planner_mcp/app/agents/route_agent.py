@@ -152,6 +152,7 @@ Return only JSON:
                         description=details["description"],
                         highlights=details["highlights"],
                         visit_tips=details["visit_tips"],
+                        image_url=place.image_url,
                         tags=place.tags,
                         best_time=place.best_time,
                         place_name=place.name,

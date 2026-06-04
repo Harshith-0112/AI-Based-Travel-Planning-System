@@ -18,6 +18,7 @@ from app.providers.mock_hotel_provider import MockHotelProvider
 from app.providers.mock_maps_provider import MockMapsProvider
 from app.providers.serpapi_hotel_provider import SerpApiHotelProvider
 from app.services.ollama_client import OllamaClient
+from app.services.place_image_service import PlaceImageService
 from app.services.scoring_service import build_user_facing_hotel_reason
 from app.utils.config import Settings
 
@@ -34,6 +35,7 @@ class PlanningService:
         self.input_agent = InputAgent()
         self.hotel_agent = HotelAgent(self.hotel_mcp)
         self.places_agent = PlacesAgent(self.maps_mcp, self.ollama_client)
+        self.place_image_service = PlaceImageService(self.maps_mcp)
         self.route_agent = RouteAgent(self.maps_mcp, self.ollama_client)
         self.transport_agent = TransportAgent(self.maps_mcp)
         self.budget_agent = BudgetAgent()
@@ -85,6 +87,7 @@ class PlanningService:
         )
 
         attractions, attraction_notes = await self.places_agent.get_ranked_attractions(normalized_request, hotel)
+        attractions = await self.place_image_service.enrich_attractions(attractions, normalized_request.destination)
         notes.extend(attraction_notes)
 
         daily_plans = await self.route_agent.build_daily_skeleton(normalized_request, hotel, attractions)

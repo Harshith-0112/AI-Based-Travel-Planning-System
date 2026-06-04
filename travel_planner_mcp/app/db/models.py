@@ -61,6 +61,7 @@ class VerifiedPlaceCache(SQLModel, table=True):
     description: str = ""
     latitude: float | None = None
     longitude: float | None = None
+    image_url: str | None = None
     source: str = "verified_ai"
     verification_source: str = "google_maps"
     verified: bool = Field(default=True, index=True)

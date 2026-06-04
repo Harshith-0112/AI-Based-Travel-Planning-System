@@ -23,6 +23,17 @@ export default function ItineraryDay({ day, destination }) {
               key={`${activity.time_slot}-${index}`}
               className="relative rounded-3xl border border-white/10 bg-slate-950/35 p-5 transition hover:-translate-y-1 hover:border-teal-300/30 hover:bg-slate-950/50"
             >
+              {activity.image_url && (
+                <img
+                  src={activity.image_url}
+                  alt={activity.place_name || activity.title}
+                  className="mb-4 h-48 w-full rounded-2xl object-cover sm:h-56"
+                  loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                  }}
+                />
+              )}
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-teal-200">{activity.time_slot}</p>

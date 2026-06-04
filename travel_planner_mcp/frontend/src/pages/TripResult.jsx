@@ -346,6 +346,7 @@ export default function TripResult() {
                   ...activity,
                   source: attraction?.source,
                   category: attraction?.category,
+                  image_url: activity.image_url || attraction?.image_url,
                   tags: activity.tags?.length ? activity.tags : attraction?.tags,
                   best_time: activity.best_time || attraction?.best_time,
                 };

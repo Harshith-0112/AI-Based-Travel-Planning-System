@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from sqlalchemy import text
 from sqlmodel import SQLModel, Session, select
 
 from app.db.database import engine
@@ -64,6 +65,7 @@ class VerifiedPlacesCache:
                         description=place.get("description") or "",
                         latitude=place.get("latitude"),
                         longitude=place.get("longitude"),
+                        image_url=place.get("image_url"),
                         source=place.get("source") or "verified_ai",
                         verification_source=place.get("verification_source") or "google_maps",
                         verified=True,
@@ -71,10 +73,71 @@ class VerifiedPlacesCache:
                 )
             session.commit()
 
+    def get_image_url(self, destination: str, place_name: str) -> str | None:
+        self._ensure_table()
+        slug = destination_slug(destination)
+        with Session(engine) as session:
+            row = session.exec(
+                select(VerifiedPlaceCache)
+                .where(VerifiedPlaceCache.destination_slug == slug)
+                .where(VerifiedPlaceCache.name == place_name)
+            ).first()
+        return row.image_url if row and row.image_url else None
+
+    def cache_image_url(
+        self,
+        destination: str,
+        place: dict[str, Any],
+        image_url: str,
+        source: str = "image_lookup",
+    ) -> None:
+        if not image_url:
+            return
+
+        self._ensure_table()
+        slug = destination_slug(destination)
+        name = str(place.get("name", "")).strip()
+        if not name:
+            return
+
+        with Session(engine) as session:
+            row = session.exec(
+                select(VerifiedPlaceCache)
+                .where(VerifiedPlaceCache.destination_slug == slug)
+                .where(VerifiedPlaceCache.name == name)
+            ).first()
+            if row:
+                row.image_url = image_url
+            else:
+                session.add(
+                    VerifiedPlaceCache(
+                        destination_slug=slug,
+                        name=name,
+                        category=place.get("category") or "tourist_attraction",
+                        description=place.get("description") or "",
+                        latitude=place.get("latitude"),
+                        longitude=place.get("longitude"),
+                        image_url=image_url,
+                        source=place.get("source") or source,
+                        verification_source=place.get("verification_source") or source,
+                        verified=place.get("verified") is not False,
+                    )
+                )
+            session.commit()
+
     def _ensure_table(self) -> None:
         if not self._table_ready:
             SQLModel.metadata.create_all(engine)
+            self._ensure_image_url_column()
             self._table_ready = True
+
+    @staticmethod
+    def _ensure_image_url_column() -> None:
+        with engine.begin() as connection:
+            columns = connection.execute(text("PRAGMA table_info(verified_place_cache)")).fetchall()
+            column_names = {row[1] for row in columns}
+            if "image_url" not in column_names:
+                connection.execute(text("ALTER TABLE verified_place_cache ADD COLUMN image_url TEXT NULL"))
 
     @staticmethod
     def _row_to_place(row: VerifiedPlaceCache) -> dict[str, Any]:
@@ -88,6 +151,7 @@ class VerifiedPlacesCache:
             "review_count": None,
             "latitude": row.latitude,
             "longitude": row.longitude,
+            "image_url": row.image_url,
             "source": "verified_cache",
             "verification_source": row.verification_source,
             "verified": row.verified,

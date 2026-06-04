@@ -23,6 +23,7 @@ from app.models.trip_schemas import TripCreate
 from app.providers.fallback_places_provider import FallbackPlacesProvider
 from app.providers.place_verifier import PlaceVerifier
 from app.providers.hotel_provider_base import BaseHotelProvider
+from app.services.place_image_service import PlaceImageService
 from app.services.scoring_service import build_user_facing_hotel_reason
 from app.utils.destination_normalizer import normalize_destination_name
 
@@ -272,6 +273,52 @@ class EmptyOSMPlacesProvider:
         return []
 
 
+class FakeImageMapsMCP:
+    def __init__(self, photo_url: str | None = None) -> None:
+        self.photo_url = photo_url
+        self.called = False
+
+    async def get_place_details(self, place_id: str) -> dict:
+        self.called = True
+        if not self.photo_url:
+            raise RuntimeError("no google photo")
+        return {"place_id": place_id, "photo_url": self.photo_url}
+
+
+class FakeImageCache:
+    def __init__(self, image_url: str | None = None) -> None:
+        self.image_url = image_url
+        self.cached: list[tuple[str, str]] = []
+
+    def get_image_url(self, destination: str, place_name: str) -> str | None:
+        return self.image_url
+
+    def cache_image_url(
+        self,
+        destination: str,
+        place: dict,
+        image_url: str,
+        source: str = "image_lookup",
+    ) -> None:
+        self.cached.append((place["name"], image_url))
+
+
+class FakeWikimediaImageService(PlaceImageService):
+    def __init__(
+        self,
+        maps_mcp: FakeImageMapsMCP,
+        verified_cache: FakeImageCache,
+        wikimedia_url: str | None = None,
+    ) -> None:
+        super().__init__(maps_mcp, verified_cache=verified_cache)
+        self.wikimedia_url = wikimedia_url
+        self.wikimedia_called = False
+
+    async def _wikimedia_image_search(self, place_name: str, destination: str) -> str | None:
+        self.wikimedia_called = True
+        return self.wikimedia_url
+
+
 def _select_hotel(hotel_preference: str) -> HotelOption:
     request = TripRequest(
         destination="Hyderabad",
@@ -364,6 +411,55 @@ def test_itinerary_description_uses_place_context_not_generic_phrase() -> None:
     assert "major temple" in description
     assert plans[0].activities[0].highlights
     assert plans[0].activities[0].visit_tips
+
+
+def test_place_image_service_uses_google_photo_before_cache() -> None:
+    cache = FakeImageCache(image_url="https://cache.example/kashi.jpg")
+    service = FakeWikimediaImageService(
+        FakeImageMapsMCP(photo_url="https://maps.example/kashi.jpg"),
+        verified_cache=cache,
+        wikimedia_url="https://commons.example/kashi.jpg",
+    )
+    attraction = Attraction(
+        name="Kashi Vishwanath Temple",
+        category="temples",
+        place_id="places/kashi",
+    )
+
+    image_url = asyncio.run(service.get_image_url(attraction, "Varanasi"))
+
+    assert image_url == "https://maps.example/kashi.jpg"
+    assert cache.cached == [("Kashi Vishwanath Temple", "https://maps.example/kashi.jpg")]
+    assert service.wikimedia_called is False
+
+
+def test_place_image_service_uses_cached_image_before_wikimedia() -> None:
+    cache = FakeImageCache(image_url="https://cache.example/palace.jpg")
+    service = FakeWikimediaImageService(
+        FakeImageMapsMCP(photo_url=None),
+        verified_cache=cache,
+        wikimedia_url="https://commons.example/palace.jpg",
+    )
+    attraction = Attraction(name="Mysore Palace", category="history", place_id="places/mysore")
+
+    image_url = asyncio.run(service.get_image_url(attraction, "Mysore"))
+
+    assert image_url == "https://cache.example/palace.jpg"
+    assert cache.cached == []
+    assert service.wikimedia_called is False
+
+
+def test_place_image_service_returns_none_when_no_reliable_image_exists() -> None:
+    service = FakeWikimediaImageService(
+        FakeImageMapsMCP(photo_url=None),
+        verified_cache=FakeImageCache(image_url=None),
+        wikimedia_url=None,
+    )
+    attraction = Attraction(name="Unknown Place", category="history", place_id="places/unknown")
+
+    image_url = asyncio.run(service.get_image_url(attraction, "Unknownville"))
+
+    assert image_url is None
 
 
 def test_selecting_alternative_hotel_changes_lodging_and_total_cost() -> None:

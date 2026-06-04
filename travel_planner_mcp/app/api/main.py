@@ -85,3 +85,11 @@ async def export_ics(
 ) -> PlainTextResponse:
     ics_text = planning_service.export_agent.export_ics(plan)
     return PlainTextResponse(content=ics_text, media_type="text/calendar")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

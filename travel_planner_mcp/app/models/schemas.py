@@ -96,6 +96,7 @@ class Attraction(BaseModel):
     verified: bool | None = None
     place_id: str | None = None
     description: str | None = None
+    image_url: str | None = None
     tags: list[str] = Field(default_factory=list)
     best_time: str | None = None
     estimated_cost: float | None = None
@@ -117,6 +118,7 @@ class DailyActivity(BaseModel):
     description: str | None = None
     highlights: list[str] = Field(default_factory=list)
     visit_tips: list[str] = Field(default_factory=list)
+    image_url: str | None = None
     tags: list[str] = Field(default_factory=list)
     best_time: str | None = None
     place_name: str | None = None

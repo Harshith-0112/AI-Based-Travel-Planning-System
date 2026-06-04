@@ -41,7 +41,7 @@ class GoogleMapsProvider(BaseMapsProvider):
             "X-Goog-Api-Key": self.api_key,
             "X-Goog-FieldMask": (
                 "places.id,places.displayName,places.formattedAddress,"
-                "places.location,places.rating,places.userRatingCount,places.types"
+                "places.location,places.rating,places.userRatingCount,places.types,places.photos"
             ),
         }
         body = {
@@ -73,6 +73,7 @@ class GoogleMapsProvider(BaseMapsProvider):
                 "review_count": item.get("userRatingCount"),
                 "estimated_visit_hours": 2.0,
                 "place_id": item.get("id"),
+                "image_url": self._photo_url(item),
                 "source": "google_maps",
             }
             for item in payload.get("places", [])
@@ -130,7 +131,8 @@ class GoogleMapsProvider(BaseMapsProvider):
         headers = {
             "X-Goog-Api-Key": self.api_key,
             "X-Goog-FieldMask": (
-                "id,displayName,formattedAddress,regularOpeningHours.weekdayDescriptions,websiteUri,editorialSummary"
+                "id,displayName,formattedAddress,regularOpeningHours.weekdayDescriptions,"
+                "websiteUri,editorialSummary,photos"
             ),
         }
         async with httpx.AsyncClient(timeout=20.0) as client:
@@ -144,4 +146,17 @@ class GoogleMapsProvider(BaseMapsProvider):
             "opening_hours": payload.get("regularOpeningHours", {}).get("weekdayDescriptions", []),
             "website": payload.get("websiteUri"),
             "description": payload.get("editorialSummary", {}).get("text"),
+            "photo_url": self._photo_url(payload),
         }
+
+    def _photo_url(self, place: dict[str, Any]) -> str | None:
+        photos = place.get("photos") or []
+        if not photos:
+            return None
+        photo_name = photos[0].get("name")
+        if not photo_name:
+            return None
+        return (
+            f"https://places.googleapis.com/v1/{photo_name}/media"
+            f"?maxWidthPx=900&maxHeightPx=600&key={self.api_key}"
+        )
